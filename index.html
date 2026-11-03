@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>Saved</title>
+<style>
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:-apple-system,system-ui,sans-serif;background:#111;color:#f2f2f2;text-align:center}
+@media (prefers-color-scheme:light){body{background:#fafafa;color:#111}}
+.b{padding:24px}.i{font-size:64px;line-height:1}.t{font-size:26px;font-weight:600;margin:14px 0 6px}.s{opacity:.65;font-size:15px}
+button{margin-top:24px;font-size:17px;padding:12px 22px;border-radius:999px;border:1px solid currentColor;background:none;color:inherit}
+</style></head><body><div class="b"><div class="i" id="i">…</div><div class="t" id="t">Saving</div><div class="s" id="s"></div>
+<button onclick="go()">Back to Watch</button></div>
+<script>
+var L={love:"Loved",like:"Liked",nope:"Not for me",seen:"Seen",watchlist:"On your watchlist"};
+var p=new URLSearchParams(location.search),t=p.get("t")||"",m=p.get("m")||"";
+var f=m.split("|"),label=(L[f[2]]||"Saved")+": "+(f.slice(3).join("|")||f[1]||"");
+function go(){if(history.length>1){history.back()}else{window.close()}}
+function show(ok,msg){document.getElementById("i").textContent=ok?"✓":"!";document.getElementById("t").textContent=ok?label:"Didn't save";document.getElementById("s").textContent=msg}
+if(!/^bm-(thomas-)?watch-[A-Za-z0-9]{20,40}$/.test(t)||f.length<4){show(false,"This link is incomplete.")}
+else{fetch("https://ntfy.sh/"+t,{method:"POST",body:m}).then(function(r){if(!r.ok)throw 0;show(true,"Tap Back, or close this tab.");setTimeout(function(){window.close()},1500)}).catch(function(){show(false,"Tell Grok in chat instead.")})}
+</script></body></html>
